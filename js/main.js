@@ -107,6 +107,12 @@ class Bullet {
         this.positionY = this.positionY + 1.5; // Velocidad de la bala
         this.updateUI()
     }
+
+    remove() {
+        this.bulletElement.remove()
+    }
+
+
 }
 
 
@@ -121,11 +127,11 @@ let moveInterval = null;
 
 // Funcion que crea las balas
 const shootBullet = () => {
-    const bullet = new Bullet( 
+    const bullet = new Bullet(
         player.positionX + player.width / 2 - 0.5,  // En el centro horizontal del jugador
         player.positionY + player.height  //  Encima de su posicion vertical
     );
-    bulletArr.push(bullet); 
+    bulletArr.push(bullet);
 
 }
 
@@ -133,16 +139,20 @@ const shootBullet = () => {
 const startGame = () => {
     if (!spawnInterval && !moveInterval) { // Solo crea intervalos si NO existen (evita duplicarlos accidentalmente)
         spawnInterval = setInterval(() => {
-            const newEnemy = new Enemy() 
-            enemiesArr.push(newEnemy) 
+            const newEnemy = new Enemy()
+            enemiesArr.push(newEnemy)
         }, 4000);
 
         moveInterval = setInterval(() => {
 
-            enemiesArr.forEach(enemyInstance => {
-                enemyInstance.moveDown()  
+            enemiesArr.forEach((enemyInstance) => {
+                enemyInstance.moveDown()
+                // Elimina el enemigo si llega al fondo del tablero
+                if (enemyInstance.positionY < 0) {
+                    location.href = "game-over.html" // Redirige a la pantalla de Game Over si un enemigo llega al fondo del tablero
+                }
 
-                if ( // Comprueba si el jugador toca un enemigo
+                else if ( // Comprueba si el jugador toca un enemigo
                     player.positionX < enemyInstance.positionX + enemyInstance.width &&
                     player.positionX + player.width > enemyInstance.positionX &&
                     player.positionY < enemyInstance.positionY + enemyInstance.height &&
@@ -154,9 +164,14 @@ const startGame = () => {
 
 
 
-            bulletArr.forEach((bullet,bulletIndex) => {
-                bullet.moveUp(); 
-                enemiesArr.forEach((enemy,enemyIndex) => {
+            bulletArr.forEach((bullet, bulletIndex) => {
+                bullet.moveUp();
+                if (bullet.positionY > 100) {
+                    bullet.remove()
+                    bulletArr.splice(bulletIndex, 1)
+                    return // Elimina la bala del array y el DOM cuando se sale de la pagina 
+                }
+                enemiesArr.forEach((enemy, enemyIndex) => {
                     if ( // Comprueba si la bala toca un enemigo
                         bullet.positionX < enemy.positionX + enemy.width &&
                         bullet.positionX + bullet.width > enemy.positionX &&
@@ -164,9 +179,9 @@ const startGame = () => {
                         bullet.positionY + bullet.height > enemy.positionY
                     ) {
                         enemy.enemyElement.remove()
-                        enemiesArr.splice(enemyIndex,1)
+                        enemiesArr.splice(enemyIndex, 1)
                         bullet.remove()
-                        bulletArr.splice(bulletIndex,1)
+                        bulletArr.splice(bulletIndex, 1)
                     }
                 })
             });
@@ -187,9 +202,9 @@ const pauseGame = () => {
 
 // Detecta cuando cambias de pestaña o minimizas el navegador
 document.addEventListener("visibilitychange", () => {
-    if (document.hidden) { 
+    if (document.hidden) {
         pauseGame()
-    } else { 
+    } else {
         startGame()
     }
 })
