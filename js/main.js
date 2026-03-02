@@ -5,7 +5,7 @@ class Player {
     constructor() {
         this.width = 10;
         this.height = 10;
-        this.positionX = 50 - this.width / 2;
+        this.positionX = 50 - this.width / 2; // Su punto de partida es el medio de la posicion horizontal
         this.positionY = 0
 
         this.updateUI()
@@ -17,8 +17,6 @@ class Player {
         playerElm.style.width = this.width + "vw"
         playerElm.style.height = this.height + "vh"
     }
-
-
 
     moveLeft() {
         if (this.positionX > 0) {
@@ -34,7 +32,6 @@ class Player {
         }
     }
 
-
     moveUp() {
         if (this.positionY < 100 - this.height) {
             this.positionY++
@@ -47,8 +44,6 @@ class Player {
             this.positionY--
             this.updateUI()
         }
-
-
     }
 }
 
@@ -56,7 +51,7 @@ class Enemy {
     constructor() {
         this.width = 10;
         this.height = 10;
-        this.positionX = Math.floor(Math.random() * (100 - this.width + 1))
+        this.positionX = Math.floor(Math.random() * (100 - this.width + 1)) // Spawn enemigo en una posición horizontal aleatoria
         this.positionY = 100
 
         this.createEnemyElement()
@@ -79,7 +74,7 @@ class Enemy {
     }
 
     moveDown() {
-        this.positionY = this.positionY - 0.1
+        this.positionY = this.positionY - 0.3 // Mueve el enemigo hacia abajo lentamente
         this.updateUI()
     }
 }
@@ -105,14 +100,13 @@ class Bullet {
         this.bulletElement.style.left = this.positionX + "vw"
         this.bulletElement.style.bottom = this.positionY + "vh"
         this.bulletElement.style.width = this.width + "vw"
-         this.bulletElement.style.height = this.height + "vh"
-    }  
-
-    moveUp() {
-        this.positionY = this.positionY + 1.5;
-        this.updateUI()
+        this.bulletElement.style.height = this.height + "vh"
     }
 
+    moveUp() {
+        this.positionY = this.positionY + 1.5; // Velocidad de la bala
+        this.updateUI()
+    }
 }
 
 
@@ -127,11 +121,11 @@ let moveInterval = null;
 
 // Funcion que crea las balas
 const shootBullet = () => {
-    const bullet = new Bullet(
-        player.positionX + player.width / 2 - 0.5,  // crea una bala en el centro horizon del jugador
-        player.positionY + player.height  // y encima de su posicion vertical
+    const bullet = new Bullet( 
+        player.positionX + player.width / 2 - 0.5,  // En el centro horizontal del jugador
+        player.positionY + player.height  //  Encima de su posicion vertical
     );
-    bulletArr.push(bullet); // Lo guarda en el array 
+    bulletArr.push(bullet); 
 
 }
 
@@ -139,13 +133,14 @@ const shootBullet = () => {
 const startGame = () => {
     if (!spawnInterval && !moveInterval) { // Solo crea intervalos si NO existen (evita duplicarlos accidentalmente)
         spawnInterval = setInterval(() => {
-            const newEnemy = new Enemy() // Crea un enemigo
-            enemiesArr.push(newEnemy) // Lo guarda en el array
+            const newEnemy = new Enemy() 
+            enemiesArr.push(newEnemy) 
         }, 4000);
 
         moveInterval = setInterval(() => {
+
             enemiesArr.forEach(enemyInstance => {
-                enemyInstance.moveDown()  // Mueve cada enemigo
+                enemyInstance.moveDown()  
 
                 if ( // Comprueba si el jugador toca un enemigo
                     player.positionX < enemyInstance.positionX + enemyInstance.width &&
@@ -153,12 +148,24 @@ const startGame = () => {
                     player.positionY < enemyInstance.positionY + enemyInstance.height &&
                     player.positionY + player.height > enemyInstance.positionY
                 ) {
-                    location.href = "game-over.html"
+                    location.href = "game-over.html" // Redirige a la pantalla de Game Over si el jugador colisiona con un enemigo
                 }
             })
 
+
+
             bulletArr.forEach((bullet) => {
-                bullet.moveUp(); // mueve la bala hacia arriba
+                bullet.moveUp(); 
+                enemiesArr.forEach((enemy) => {
+                    if ( // Comprueba si la bala toca un enemigo
+                        bullet.positionX < enemy.positionX + enemy.width &&
+                        bullet.positionX + bullet.width > enemy.positionX &&
+                        bullet.positionY < enemy.positionY + enemy.height &&
+                        bullet.positionY + bullet.height > enemy.positionY
+                    ) {
+                        console.log("Defeated enemy")
+                    }
+                })
             });
         }, 30);
     }
@@ -177,9 +184,9 @@ const pauseGame = () => {
 
 // Detecta cuando cambias de pestaña o minimizas el navegador
 document.addEventListener("visibilitychange", () => {
-    if (document.hidden) { // // Si la pestaña NO está visible pausara el juego
+    if (document.hidden) { 
         pauseGame()
-    } else { // Si vuelves a la pestaña el juego continuara
+    } else { 
         startGame()
     }
 })
@@ -189,7 +196,7 @@ startGame()
 
 
 
-// Detecta movimentos del jugador usando las flechas
+// Detecta movimentos del jugador usando las teclas
 document.addEventListener("keydown", (e) => {
     if (e.code === "ArrowLeft") {
         player.moveLeft()
@@ -204,7 +211,5 @@ document.addEventListener("keydown", (e) => {
         shootBullet()
     }
 })
-
-
 
 
