@@ -52,22 +52,22 @@ class Player {
 }
 
 class Enemy {
-    constructor(){
+    constructor() {
         this.width = 10;
         this.height = 10;
         this.positionX = Math.floor(Math.random() * (100 - this.width + 1))
         this.positionY = 100
-        
+
         this.createEnemyElement()
         this.updateUI()
 
     }
 
-    createEnemyElement(){
+    createEnemyElement() {
         this.enemyElement = document.createElement("div")
         this.enemyElement.className = "enemy"
         parentElm.appendChild(this.enemyElement)
-        
+
     }
 
     updateUI() {
@@ -77,7 +77,7 @@ class Enemy {
         this.enemyElement.style.height = this.height + "vh"
     }
 
-    moveDown(){
+    moveDown() {
         this.positionY--
         this.updateUI()
     }
@@ -89,21 +89,46 @@ const player = new Player()
 
 let enemiesArr = []
 
-// Generate new enemies 
+// Se inicializan en null para saber que aún no existen
+let spawnInterval = null;
+let moveInterval = null;
 
-setInterval(() => {
-    const newEnemy = new Enemy()
-    enemiesArr.push(newEnemy)
-}, 4000);
+// Función que inicia el juego
+const startGame = () => {
+    if (!spawnInterval && !moveInterval) { // Solo crea intervalos si NO existen (evita duplicarlos accidentalmente)
+        spawnInterval = setInterval(() => {
+            const newEnemy = new Enemy() // crea un enemigo
+            enemiesArr.push(newEnemy) // lo guarda en el array
+        }, 1000);
 
-setInterval(() => {
-   enemiesArr.forEach( enemyInstance  => {
-        enemyInstance.moveDown()
-   }) 
-}, 30);
+        moveInterval = setInterval(() => {
+            enemiesArr.forEach(enemyInstance => enemyInstance.moveDown()) // mueve cada enemigo
+        }, 30);
+    }
+}
 
+// Función para pausar el juego
+const pauseGame = () => {
+    
+    clearInterval(spawnInterval)
+    clearInterval(moveInterval)
+    // resetea las variables
+    // permite reiniciar sin duplicados
+    spawnInterval = null
+    moveInterval = null
+}
 
+// Detecta cuando cambias de pestaña o minimizas el navegador
+document.addEventListener("visibilitychange", () => {
+    if (document.hidden) { // // si la pestaña NO está visible pausará el juego
+        pauseGame()
+    } else { // si vuelves a la pestaña el juego continuará
+        startGame()
+    }
+})
 
+// inicia el juego al cargar la página
+startGame()
 
 document.addEventListener("keydown", (e) => {
     if (e.code === "ArrowLeft") {
