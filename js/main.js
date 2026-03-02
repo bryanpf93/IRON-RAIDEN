@@ -6,14 +6,14 @@ class Player {
         this.width = 10;
         this.height = 10;
         this.positionX = 50 - this.width / 2;
-        this.positionY = 100 - this.height;
+        this.positionY = 0
 
         this.updateUI()
     }
 
     updateUI() {
         playerElm.style.left = this.positionX + "vw"
-        playerElm.style.top = this.positionY + "vh"
+        playerElm.style.bottom = this.positionY + "vh"
         playerElm.style.width = this.width + "vw"
         playerElm.style.height = this.height + "vh"
     }
@@ -36,18 +36,19 @@ class Player {
 
 
     moveUp() {
-        if (this.positionY > 0) {
-            this.positionY--
+        if (this.positionY < 100 - this.height) {
+            this.positionY++
             this.updateUI()
         }
     }
 
     moveDown() {
-
-        if (this.positionY < 100 - this.height) {
-            this.positionY++
+        if (this.positionY > 0) {
+            this.positionY--
             this.updateUI()
         }
+
+        
     }
 }
 
@@ -78,7 +79,7 @@ class Enemy {
     }
 
     moveDown() {
-        this.positionY--
+        this.positionY = this.positionY - 0.1
         this.updateUI()
     }
 }
@@ -89,47 +90,62 @@ const player = new Player()
 
 let enemiesArr = []
 
-// Se inicializan en null para saber que aún no existen
+// Se inicializan en null para saber que aun no existen
 let spawnInterval = null;
 let moveInterval = null;
 
-// Función que inicia el juego
+// Funcion que inicia el juego
 const startGame = () => {
     if (!spawnInterval && !moveInterval) { // Solo crea intervalos si NO existen (evita duplicarlos accidentalmente)
         spawnInterval = setInterval(() => {
-            const newEnemy = new Enemy() // crea un enemigo
-            enemiesArr.push(newEnemy) // lo guarda en el array
-        }, 1000);
+            const newEnemy = new Enemy() // Crea un enemigo
+            enemiesArr.push(newEnemy) // Lo guarda en el array
+        }, 4000);
 
         moveInterval = setInterval(() => {
-            enemiesArr.forEach(enemyInstance => enemyInstance.moveDown()) // mueve cada enemigo
+            enemiesArr.forEach(enemyInstance => {
+                enemyInstance.moveDown()  // Mueve cada enemigo
+
+                if (
+                    player.positionX < enemyInstance.positionX + enemyInstance.width &&
+                    player.positionX + player.width > enemyInstance.positionX &&
+                    player.positionY < enemyInstance.positionY + enemyInstance.height &&
+                    player.positionY + player.height > enemyInstance.positionY
+                ) {
+                    console.log("gamer over")
+                    location.href = "game-over.html" 
+                }
+            })
         }, 30);
     }
 }
 
 // Función para pausar el juego
 const pauseGame = () => {
-    
+
     clearInterval(spawnInterval)
     clearInterval(moveInterval)
-    // resetea las variables
-    // permite reiniciar sin duplicados
+    // Resetea las variables
+    // Permite reiniciar sin duplicados
     spawnInterval = null
     moveInterval = null
 }
 
 // Detecta cuando cambias de pestaña o minimizas el navegador
 document.addEventListener("visibilitychange", () => {
-    if (document.hidden) { // // si la pestaña NO está visible pausará el juego
+    if (document.hidden) { // // Si la pestaña NO está visible pausara el juego
         pauseGame()
-    } else { // si vuelves a la pestaña el juego continuará
+    } else { // Si vuelves a la pestaña el juego continuara
         startGame()
     }
 })
 
-// inicia el juego al cargar la página
+// Inicia el juego al cargar la página
 startGame()
 
+
+
+// Detecta movimentos del jugador usando las flechas
 document.addEventListener("keydown", (e) => {
     if (e.code === "ArrowLeft") {
         player.moveLeft()

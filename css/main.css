@@ -22,3 +22,8 @@ body{
     background-color: rgb(110, 28, 110);
     position: absolute;
 }
+
+#page-gameover {
+    text-align: center;
+    background-color: rgb(216, 197, 232);
+}
