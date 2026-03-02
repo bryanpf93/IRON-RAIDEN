@@ -17,3 +17,8 @@ body{
     position: absolute;
   
 }
+
+.enemy {
+    background-color: rgb(110, 28, 110);
+    position: absolute;
+}

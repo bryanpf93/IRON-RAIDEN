@@ -1,3 +1,4 @@
+const parentElm = document.getElementById("board")
 const playerElm = document.getElementById("player")
 
 class Player {
@@ -50,7 +51,58 @@ class Player {
     }
 }
 
+class Enemy {
+    constructor(){
+        this.width = 10;
+        this.height = 10;
+        this.positionX = Math.floor(Math.random() * (100 - this.width + 1))
+        this.positionY = 100
+        
+        this.createEnemyElement()
+        this.updateUI()
+
+    }
+
+    createEnemyElement(){
+        this.enemyElement = document.createElement("div")
+        this.enemyElement.className = "enemy"
+        parentElm.appendChild(this.enemyElement)
+        
+    }
+
+    updateUI() {
+        this.enemyElement.style.left = this.positionX + "vw"
+        this.enemyElement.style.bottom = this.positionY + "vh"
+        this.enemyElement.style.width = this.width + "vw"
+        this.enemyElement.style.height = this.height + "vh"
+    }
+
+    moveDown(){
+        this.positionY--
+        this.updateUI()
+    }
+}
+
+
+
 const player = new Player()
+
+let enemiesArr = []
+
+// Generate new enemies 
+
+setInterval(() => {
+    const newEnemy = new Enemy()
+    enemiesArr.push(newEnemy)
+}, 4000);
+
+setInterval(() => {
+   enemiesArr.forEach( enemyInstance  => {
+        enemyInstance.moveDown()
+   }) 
+}, 30);
+
+
 
 
 document.addEventListener("keydown", (e) => {
