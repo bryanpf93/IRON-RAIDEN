@@ -112,8 +112,8 @@ class Bullet {
 
 const player = new Player()
 
-let enemiesArr = []
-let bulletArr = []
+let enemiesArr = [] // array de los enemigos generados
+let bulletArr = [] // array de las balas generadas
 
 // Se inicializan en null para saber que aun no existen
 let spawnInterval = null;
@@ -154,16 +154,19 @@ const startGame = () => {
 
 
 
-            bulletArr.forEach((bullet) => {
+            bulletArr.forEach((bullet,bulletIndex) => {
                 bullet.moveUp(); 
-                enemiesArr.forEach((enemy) => {
+                enemiesArr.forEach((enemy,enemyIndex) => {
                     if ( // Comprueba si la bala toca un enemigo
                         bullet.positionX < enemy.positionX + enemy.width &&
                         bullet.positionX + bullet.width > enemy.positionX &&
                         bullet.positionY < enemy.positionY + enemy.height &&
                         bullet.positionY + bullet.height > enemy.positionY
                     ) {
-                        console.log("Defeated enemy")
+                        enemy.enemyElement.remove()
+                        enemiesArr.splice(enemyIndex,1)
+                        bullet.remove()
+                        bulletArr.splice(bulletIndex,1)
                     }
                 })
             });
