@@ -216,7 +216,7 @@ const pauseGame = () => {
 }
 
 // Detecta cuando cambias de pestaña o minimizas el navegador
-document.addEventListener("visibility", () => {
+document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
         pauseGame()
     } else {
@@ -224,8 +224,13 @@ document.addEventListener("visibility", () => {
     }
 })
 
+window.addEventListener("blur", () => pauseGame()) // minimizas el navegador
+window.addEventListener("focus", () => startGame()) // vuelves al navegador
+
 // Inicia el juego al cargar la página
-startGame()
+if (document.hasFocus()) {
+    startGame()
+}
 
 
 
