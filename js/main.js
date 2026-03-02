@@ -48,7 +48,7 @@ class Player {
             this.updateUI()
         }
 
-        
+
     }
 }
 
@@ -84,15 +84,56 @@ class Enemy {
     }
 }
 
+class Bullet {
+    constructor(x, y) {
+        this.width = 1;
+        this.height = 3;
+        this.positionX = x;
+        this.positionY = y
+
+        this.createBulletElement();
+        this.updateUI();
+    }
+
+    createBulletElement() {
+        this.bulletElement = document.createElement("div")
+        this.bulletElement.className = "bullet"
+        parentElm.appendChild(this.bulletElement)
+    }
+
+    updateUI() {
+        this.bulletElement.style.left = this.positionX + "vw"
+        this.bulletElement.style.bottom = this.positionY + "vh"
+        this.bulletElement.style.width = this.width + "vw"
+         this.bulletElement.style.height = this.height + "vh"
+    }  
+
+    moveUp() {
+        this.positionY = this.positionY + 1.5;
+        this.updateUI()
+    }
+
+}
 
 
 const player = new Player()
 
 let enemiesArr = []
+let bulletArr = []
 
 // Se inicializan en null para saber que aun no existen
 let spawnInterval = null;
 let moveInterval = null;
+
+// Funcion que crea las balas
+const shootBullet = () => {
+    const bullet = new Bullet(
+        player.positionX + player.width / 2 - 0.5,  // crea una bala en el centro horizon del jugador
+        player.positionY + player.height  // y encima de su posicion vertical
+    );
+    bulletArr.push(bullet); // Lo guarda en el array 
+
+}
 
 // Funcion que inicia el juego
 const startGame = () => {
@@ -106,16 +147,19 @@ const startGame = () => {
             enemiesArr.forEach(enemyInstance => {
                 enemyInstance.moveDown()  // Mueve cada enemigo
 
-                if (
+                if ( // Comprueba si el jugador toca un enemigo
                     player.positionX < enemyInstance.positionX + enemyInstance.width &&
                     player.positionX + player.width > enemyInstance.positionX &&
                     player.positionY < enemyInstance.positionY + enemyInstance.height &&
                     player.positionY + player.height > enemyInstance.positionY
                 ) {
-                    console.log("gamer over")
-                    location.href = "game-over.html" 
+                    location.href = "game-over.html"
                 }
             })
+
+            bulletArr.forEach((bullet) => {
+                bullet.moveUp(); // mueve la bala hacia arriba
+            });
         }, 30);
     }
 }
@@ -155,8 +199,12 @@ document.addEventListener("keydown", (e) => {
         player.moveUp()
     } else if (e.code === "ArrowDown") {
         player.moveDown()
+    } else if (e.code === "Space") {
+        e.preventDefault()
+        shootBullet()
     }
 })
+
 
 
 
