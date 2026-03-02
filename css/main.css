@@ -1,9 +1,19 @@
 body{
     padding: 0;
     margin: 0;
+    
 }
 
+#board {
+    background-color: burlywood;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
 
-#title {
-    color: red;
+#player {
+    background-color: red;
+    position: absolute;
+  
 }
