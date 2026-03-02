@@ -1,5 +1,7 @@
 const parentElm = document.getElementById("board")
 const playerElm = document.getElementById("player")
+const scoreElm = document.getElementById("score")
+const livesElm = document.getElementById("lives")
 
 class Player {
     constructor() {
@@ -121,6 +123,7 @@ const player = new Player()
 let enemiesArr = [] // array de los enemigos generados
 let bulletArr = [] // array de las balas generadas
 let lives = 3
+let score = 0;
 
 // Se inicializan en null para saber que aun no existen
 let spawnInterval = null;
@@ -153,6 +156,7 @@ const startGame = () => {
                     enemyInstance.enemyElement.remove()
                     enemiesArr.splice(enemyInstanceIndex, 1)
                     lives--
+                    livesElm.innerHTML = `LIVES: ${lives}`
                     
                     if (lives <= 0) {
                         location.href = "game-over.html" // Redirige a la pantalla de Game Over si el jugador pierde todas sus vidas
@@ -189,6 +193,10 @@ const startGame = () => {
                         enemiesArr.splice(enemyIndex, 1)
                         bullet.remove()
                         bulletArr.splice(bulletIndex, 1)
+                        score += 10
+                        scoreElm.innerHTML = `SCORE: ${score}`
+                        console.log(score)
+
                     }
                 })
             });
@@ -208,7 +216,7 @@ const pauseGame = () => {
 }
 
 // Detecta cuando cambias de pestaña o minimizas el navegador
-document.addEventListener("visibilitychange", () => {
+document.addEventListener("visibility", () => {
     if (document.hidden) {
         pauseGame()
     } else {
