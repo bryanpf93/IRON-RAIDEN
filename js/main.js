@@ -5,45 +5,44 @@ const livesElm = document.getElementById("lives")
 
 class Player {
     constructor() {
-        this.width = 10;
-        this.height = 10;
-        this.positionX = 50 - this.width / 2; // Su punto de partida es el medio de la posicion horizontal
+        this.width = 150;
+        this.height = 120;
+        this.positionX = (parentElm.clientWidth / 2) - (this.width / 2); // Su punto de partida es el medio de la posicion horizontal
         this.positionY = 0
-
         this.updateUI()
     }
 
     updateUI() {
-        playerElm.style.left = this.positionX + "vw"
-        playerElm.style.bottom = this.positionY + "vh"
-        playerElm.style.width = this.width + "vw"
-        playerElm.style.height = this.height + "vh"
+        playerElm.style.left = this.positionX + "px"
+        playerElm.style.bottom = this.positionY + "px"
+        playerElm.style.width = this.width + "px"
+        playerElm.style.height = this.height + "px"
     }
 
     moveLeft() {
         if (this.positionX > 0) {
-            this.positionX--
+            this.positionX -= 7
             this.updateUI()
         }
     }
 
     moveRight() {
-        if (this.positionX < 100 - this.width) {
-            this.positionX++
+        if (this.positionX < parentElm.clientWidth - this.width) {
+            this.positionX += 7
             this.updateUI()
         }
     }
 
     moveUp() {
-        if (this.positionY < 100 - this.height) {
-            this.positionY++
+        if (this.positionY < parentElm.clientWidth - this.height) {
+            this.positionY += 7
             this.updateUI()
         }
     }
 
     moveDown() {
         if (this.positionY > 0) {
-            this.positionY--
+            this.positionY -= 7
             this.updateUI()
         }
     }
@@ -51,10 +50,10 @@ class Player {
 
 class Enemy {
     constructor() {
-        this.width = 10;
-        this.height = 10;
-        this.positionX = Math.floor(Math.random() * (100 - this.width + 1)) // Spawn enemigo en una posición horizontal aleatoria
-        this.positionY = 100
+        this.width = 150;
+        this.height = 120;
+        this.positionX = Math.floor(Math.random() * (parentElm.clientWidth - this.width + 1)) // Spawn enemigo en una posición horizontal aleatoria
+        this.positionY = parentElm.clientHeight
 
         this.createEnemyElement()
         this.updateUI()
@@ -69,22 +68,22 @@ class Enemy {
     }
 
     updateUI() {
-        this.enemyElement.style.left = this.positionX + "vw"
-        this.enemyElement.style.bottom = this.positionY + "vh"
-        this.enemyElement.style.width = this.width + "vw"
-        this.enemyElement.style.height = this.height + "vh"
+        this.enemyElement.style.left = this.positionX + "px"
+        this.enemyElement.style.bottom = this.positionY + "px"
+        this.enemyElement.style.width = this.width + "px"
+        this.enemyElement.style.height = this.height + "px"
     }
 
     moveDown() {
-        this.positionY = this.positionY - 0.3 // Mueve el enemigo hacia abajo lentamente
+        this.positionY -= 4 // Mueve el enemigo hacia abajo lentamente
         this.updateUI()
     }
 }
 
 class Bullet {
     constructor(x, y) {
-        this.width = 1;
-        this.height = 3;
+        this.width = 10;
+        this.height = 30;
         this.positionX = x;
         this.positionY = y
 
@@ -99,14 +98,14 @@ class Bullet {
     }
 
     updateUI() {
-        this.bulletElement.style.left = this.positionX + "vw"
-        this.bulletElement.style.bottom = this.positionY + "vh"
-        this.bulletElement.style.width = this.width + "vw"
-        this.bulletElement.style.height = this.height + "vh"
+        this.bulletElement.style.left = this.positionX - this.width / 2 + "px"
+        this.bulletElement.style.bottom = this.positionY + "px"
+        this.bulletElement.style.width = this.width + "px"
+        this.bulletElement.style.height = this.height + "px"
     }
 
     moveUp() {
-        this.positionY = this.positionY + 1.5; // Velocidad de la bala
+        this.positionY = this.positionY + 5; // Velocidad de la bala
         this.updateUI()
     }
 
@@ -132,7 +131,7 @@ let moveInterval = null;
 // Funcion que crea las balas
 const shootBullet = () => {
     const bullet = new Bullet(
-        player.positionX + player.width / 2 - 0.5,  // En el centro horizontal del jugador
+        player.positionX + player.width / 2,  // En el centro horizontal del jugador
         player.positionY + player.height  //  Encima de su posicion vertical
     );
     bulletArr.push(bullet);
@@ -177,7 +176,7 @@ const startGame = () => {
 
             bulletArr.forEach((bullet, bulletIndex) => {
                 bullet.moveUp();
-                if (bullet.positionY > 100) {
+                if (bullet.positionY > parentElm.clientHeight ) {
                     bullet.remove()
                     bulletArr.splice(bulletIndex, 1)
                     return // Elimina la bala del array y el DOM cuando se sale de la pagina 
@@ -227,7 +226,7 @@ document.addEventListener("visibilitychange", () => {
 window.addEventListener("blur", () => pauseGame()) // minimizas el navegador
 window.addEventListener("focus", () => startGame()) // vuelves al navegador
 
-// Inicia el juego al cargar la página
+// Inicia el juego al cargar la página siempre que el focus sea el navegador
 if (document.hasFocus()) {
     startGame()
 }
