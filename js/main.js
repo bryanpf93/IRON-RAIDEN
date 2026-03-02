@@ -120,6 +120,7 @@ const player = new Player()
 
 let enemiesArr = [] // array de los enemigos generados
 let bulletArr = [] // array de las balas generadas
+let lives = 3
 
 // Se inicializan en null para saber que aun no existen
 let spawnInterval = null;
@@ -145,11 +146,17 @@ const startGame = () => {
 
         moveInterval = setInterval(() => {
 
-            enemiesArr.forEach((enemyInstance) => {
+            enemiesArr.forEach((enemyInstance, enemyInstanceIndex) => {
                 enemyInstance.moveDown()
                 // Elimina el enemigo si llega al fondo del tablero
-                if (enemyInstance.positionY < 0) {
-                    location.href = "game-over.html" // Redirige a la pantalla de Game Over si un enemigo llega al fondo del tablero
+                if (enemyInstance.positionY < 0) {  
+                    enemyInstance.enemyElement.remove()
+                    enemiesArr.splice(enemyInstanceIndex, 1)
+                    lives--
+                    
+                    if (lives <= 0) {
+                        location.href = "game-over.html" // Redirige a la pantalla de Game Over si el jugador pierde todas sus vidas
+                    }
                 }
 
                 else if ( // Comprueba si el jugador toca un enemigo
