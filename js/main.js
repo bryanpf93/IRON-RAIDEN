@@ -6,7 +6,7 @@ const livesElm = document.getElementById("lives")
 class Player {
     constructor() {
         this.width = 150;
-        this.height = 150;
+        this.height = 190;
         this.positionX = (parentElm.clientWidth / 2) - (this.width / 2); // Su punto de partida es el medio de la posicion horizontal
         this.positionY = 0
         this.updateUI()
@@ -34,7 +34,7 @@ class Player {
     }
 
     moveUp() {
-        if (this.positionY < parentElm.clientWidth - this.height) {
+        if (this.positionY < parentElm.clientHeight - this.height) {
             this.positionY += 10
             this.updateUI()
         }
@@ -51,7 +51,7 @@ class Player {
 class Enemy {
     constructor() {
         this.width = 150;
-        this.height = 150;
+        this.height = 190;
         this.positionX = Math.floor(Math.random() * (parentElm.clientWidth - this.width + 1)) // Spawn enemigo en una posición horizontal aleatoria
         this.positionY = parentElm.clientHeight
 
