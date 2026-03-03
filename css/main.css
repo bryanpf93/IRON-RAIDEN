@@ -5,23 +5,53 @@ body {
 }
 
 #board {
-    width: 60vw;
+    width: 40vw;
     height: calc(100vh - 40px);
-    background-color: burlywood;
     position: relative;
     overflow: hidden;
     margin: 20px auto;
+    background-image : url("../images/board.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#page-gameover{
+    width: 40vw;
+    height: calc(100vh - 40px);
+    position: relative;
+    overflow: hidden;
+    margin: 20px auto;
+    background-image : url("../images/game-over.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 #player {
-    background-color: red;
     position: absolute;
+    background-image: url("../images/player.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
 
 }
 
 .enemy {
-    background-color: rgb(110, 28, 110);
     position: absolute;
+    background-image: url("../images/enemy.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.bullet {
+    position: absolute;
+    background-image: url("../images/bullet.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 #page-gameover {
@@ -44,7 +74,7 @@ body {
 }
 
 
-.bullet {
-    position: absolute;
-    background: yellow;
+span {
+    color: white;
+    font-size: 20px;
 }

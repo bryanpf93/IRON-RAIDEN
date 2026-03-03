@@ -6,7 +6,7 @@ const livesElm = document.getElementById("lives")
 class Player {
     constructor() {
         this.width = 150;
-        this.height = 120;
+        this.height = 150;
         this.positionX = (parentElm.clientWidth / 2) - (this.width / 2); // Su punto de partida es el medio de la posicion horizontal
         this.positionY = 0
         this.updateUI()
@@ -21,28 +21,28 @@ class Player {
 
     moveLeft() {
         if (this.positionX > 0) {
-            this.positionX -= 7
+            this.positionX -= 10
             this.updateUI()
         }
     }
 
     moveRight() {
         if (this.positionX < parentElm.clientWidth - this.width) {
-            this.positionX += 7
+            this.positionX += 10
             this.updateUI()
         }
     }
 
     moveUp() {
         if (this.positionY < parentElm.clientWidth - this.height) {
-            this.positionY += 7
+            this.positionY += 10
             this.updateUI()
         }
     }
 
     moveDown() {
         if (this.positionY > 0) {
-            this.positionY -= 7
+            this.positionY -= 10
             this.updateUI()
         }
     }
@@ -51,7 +51,7 @@ class Player {
 class Enemy {
     constructor() {
         this.width = 150;
-        this.height = 120;
+        this.height = 150;
         this.positionX = Math.floor(Math.random() * (parentElm.clientWidth - this.width + 1)) // Spawn enemigo en una posición horizontal aleatoria
         this.positionY = parentElm.clientHeight
 
@@ -82,8 +82,8 @@ class Enemy {
 
 class Bullet {
     constructor(x, y) {
-        this.width = 10;
-        this.height = 30;
+        this.width = 30;
+        this.height = 100;
         this.positionX = x;
         this.positionY = y
 
@@ -105,7 +105,7 @@ class Bullet {
     }
 
     moveUp() {
-        this.positionY = this.positionY + 5; // Velocidad de la bala
+        this.positionY = this.positionY + 10; // Velocidad de la bala
         this.updateUI()
     }
 
@@ -144,7 +144,7 @@ const startGame = () => {
         spawnInterval = setInterval(() => {
             const newEnemy = new Enemy()
             enemiesArr.push(newEnemy)
-        }, 4000);
+        }, 2500);
 
         moveInterval = setInterval(() => {
 
