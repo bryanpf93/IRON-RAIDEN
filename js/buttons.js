@@ -3,6 +3,7 @@ const controlsButton = document.getElementById("controls-button");
 const tryAgainButton = document.getElementById("try-again-button");
 const menuButton = document.getElementById("menu-button");
 const backToMenuButton = document.getElementById("back-to-menu-button");
+const backToMenuButtonTwo = document.getElementById("back-to-menu-button-2")
 
 
 
@@ -32,6 +33,12 @@ if (menuButton) {
 
 if (backToMenuButton) {
     backToMenuButton.addEventListener("click", () => {
+        window.location.href = "index.html";
+    });
+}
+
+if (backToMenuButtonTwo) {
+    backToMenuButtonTwo.addEventListener("click", () => {
         window.location.href = "index.html";
     });
 }

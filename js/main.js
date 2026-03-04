@@ -51,7 +51,7 @@ class Player {
 class Enemy {
     constructor() {
         this.width = 110;
-        this.height = 135;
+        this.height = 80;
         this.positionX = Math.floor(Math.random() * (parentElm.clientWidth - this.width + 1)) // Spawn enemigo en una posición horizontal aleatoria
         this.positionY = parentElm.clientHeight
 
@@ -82,8 +82,8 @@ class Enemy {
 
 class Bullet {
     constructor(x, y) {
-        this.width = 30;
-        this.height = 100;
+        this.width = 20;
+        this.height = 80;
         this.positionX = x;
         this.positionY = y
 
@@ -105,7 +105,7 @@ class Bullet {
     }
 
     moveUp() {
-        this.positionY = this.positionY + 20; // Velocidad de la bala
+        this.positionY = this.positionY + 10; // Velocidad de la bala
         this.updateUI()
     }
 
