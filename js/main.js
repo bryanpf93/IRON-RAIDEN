@@ -3,6 +3,7 @@ const playerElm = document.getElementById("player")
 const scoreElm = document.getElementById("score")
 const livesElm = document.getElementById("lives")
 
+
 class Player {
     constructor() {
         this.width = 110;

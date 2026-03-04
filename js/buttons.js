@@ -4,6 +4,7 @@ const tryAgainButton = document.getElementById("try-again-button");
 const menuButton = document.getElementById("menu-button");
 const backToMenuButton = document.getElementById("back-to-menu-button");
 const backToMenuButtonTwo = document.getElementById("back-to-menu-button-2")
+const menuMusic = document.getElementById("menuMusic")
 
 
 
@@ -42,3 +43,9 @@ if (backToMenuButtonTwo) {
         window.location.href = "index.html";
     });
 }
+
+menuMusic.volume = 0.4
+
+document.addEventListener("click", () => {
+    menuMusic.play()
+}, { once: true })
