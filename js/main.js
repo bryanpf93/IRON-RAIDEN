@@ -7,6 +7,7 @@ class Player {
     constructor() {
         this.width = 110;
         this.height = 150;
+        this.speed = 10 // velocidad del jugador
         this.positionX = (parentElm.clientWidth / 2) - (this.width / 2); // Su punto de partida es el medio de la posicion horizontal
         this.positionY = 0
         this.updateUI()
@@ -124,6 +125,13 @@ let bulletArr = [] // array de las balas generadas
 let lives = 3
 let score = 0;
 
+const keys = { // objeto que guarda el estado de las teclas del jugador
+  ArrowLeft: false,  // true si la tecla izquierda está presionada
+  ArrowRight: false, // true si la tecla derecha está presionada
+  ArrowUp: false,    // true si la tecla arriba está presionada
+  ArrowDown: false   // true si la tecla abajo está presionada
+}
+
 // Se inicializan en null para saber que aun no existen
 let spawnInterval = null;
 let moveInterval = null;
@@ -138,6 +146,22 @@ const shootBullet = () => {
 
 }
 
+const movePlayer = () => {
+
+  let dx = 0 // variable que guardará la dirección horizontal (-1 izquierda, 1 derecha)
+  let dy = 0 // variable que guardará la dirección vertical (1 arriba, -1 abajo)
+
+  if (keys.ArrowLeft) dx -= 1 // si la tecla izquierda está pulsada, restamos 1 → mover a la izquierda
+  if (keys.ArrowRight) dx += 1 // si la tecla derecha está pulsada, sumamos 1 → mover a la derecha
+  if (keys.ArrowUp) dy += 1 // si la tecla arriba está pulsada, sumamos 1 → mover hacia arriba
+  if (keys.ArrowDown) dy -= 1 // si la tecla abajo está pulsada, restamos 1 → mover hacia abajo
+
+  player.positionX += dx * player.speed // mueve al jugador horizontalmente según dirección y velocidad
+  player.positionY += dy * player.speed // mueve al jugador verticalmente según dirección y velocidad
+
+  player.updateUI() // actualiza la posición visual del jugador en el DOM
+}
+
 // Funcion que inicia el juego
 const startGame = () => {
     if (!spawnInterval && !moveInterval) { // Solo crea intervalos si NO existen (evita duplicarlos accidentalmente)
@@ -147,6 +171,8 @@ const startGame = () => {
         }, 3000);
 
         moveInterval = setInterval(() => {
+
+            movePlayer() // llama a la función que calcula el movimiento del jugador en cada frame
 
             enemiesArr.forEach((enemyInstance, enemyInstanceIndex) => {
                 enemyInstance.moveDown()
@@ -233,20 +259,27 @@ if (document.hasFocus()) {
 
 
 
-// Detecta movimentos del jugador usando las teclas
+
 document.addEventListener("keydown", (e) => {
-    if (e.code === "ArrowLeft") {
-        player.moveLeft()
-    } else if (e.code === "ArrowRight") {
-        player.moveRight()
-    } else if (e.code === "ArrowUp") {
-        player.moveUp()
-    } else if (e.code === "ArrowDown") {
-        player.moveDown()
-    } else if (e.code === "Space") {
-        e.preventDefault()
-        shootBullet()
-    }
+
+  if (keys.hasOwnProperty(e.code)) { 
+    // comprueba si la tecla que se pulsó es una de las que controlan movimiento
+    keys[e.code] = true // marca esa tecla como PRESIONADA
+  }
+
+  if (e.code === "Space") {
+    shootBullet()
+  }
+
+})
+
+document.addEventListener("keyup", (e) => {
+
+  if (keys.hasOwnProperty(e.code)) {
+    // si soltamos una tecla de movimiento
+    keys[e.code] = false // marcamos esa tecla como NO presionada
+  }
+
 })
 
 
