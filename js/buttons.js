@@ -1,5 +1,5 @@
 const playButton = document.getElementById("play-game-button");
-const controlsButton = document.getElementById("options-button");
+const controlsButton = document.getElementById("controls-button");
 const tryAgainButton = document.getElementById("try-again-button");
 const menuButton = document.getElementById("menu-button");
 const backToMenuButton = document.getElementById("back-to-menu-button");

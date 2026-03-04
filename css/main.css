@@ -6,42 +6,51 @@ body {
   position: relative;
 }
 
-/* Capa 1 - estrellas pequeñas */
+/* Capas de estrellas */
 body::before,
 body::after {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
+  z-index: -1;
 }
 
-/* Estrellas lejanas */
+/* Estrellas lejanas (más pequeñas y lentas) */
 body::before {
   background-image:
     radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px);
   background-size: 120px 120px;
+  background-repeat: repeat;
   animation: starsMoveSlow 200s linear infinite;
   opacity: 0.6;
 }
 
-/* Estrellas cercanas */
+/* Estrellas cercanas (más grandes y rápidas) */
 body::after {
   background-image:
     radial-gradient(rgba(255,255,255,0.9) 1.5px, transparent 1.5px);
   background-size: 80px 80px;
+  background-repeat: repeat;
   animation: starsMoveFast 120s linear infinite;
   opacity: 0.8;
 }
 
-/* Animaciones */
+/* Animaciones infinitas */
 @keyframes starsMoveSlow {
-  from { transform: translateY(0); }
-  to   { transform: translateY(1000px); }
+  from { background-position: 0 0; }
+  to   { background-position: 0 1000px; }
 }
 
 @keyframes starsMoveFast {
-  from { transform: translateY(0); }
-  to   { transform: translateY(1500px); }
+  from { background-position: 0 0; }
+  to   { background-position: 0 1500px; }
+}
+
+/* Tu board del juego */
+#board {
+  position: relative;
+  z-index: 1;
 }
 
 #menu {
@@ -76,18 +85,19 @@ body::after {
     display: flex;
     flex-direction: column;
     position: absolute;
+    justify-content: center;
+    align-items: center;
     gap: 20px;
 }
 
 #play-game-button {
     height: 150px;
-    width: 640px;
-    background-image: url("../assets/images/play-game.png");
+    width: 750px;
+    background-image: url("../assets/images/play-game-test.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     transition: transform 0.2s ease;
-    margin-bottom: 20px;
 }
 
 #play-game-button:hover {
@@ -96,9 +106,9 @@ body::after {
 
 }
 
-#options-button {
+#controls-button {
     height: 150px;
-    width: 640px;
+    width: 730px;
     background-image: url("../assets/images/controls-button.png");
     background-size: cover;
     background-position: center;
@@ -107,7 +117,7 @@ body::after {
     transition: transform 0.2s ease;
 }
 
-#options-button:hover {
+#controls-button:hover {
     transform: scale(1.1);
     cursor: pointer;
 
@@ -177,13 +187,12 @@ body::after {
 
 #try-again-button {
     height: 150px;
-    width: 640px;
+    width: 750px;
     background-image: url("../assets/images/try-again-button.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     transition: transform 0.2s ease;
-    margin-bottom: 20px;
 }
 
 #try-again-button:hover {
@@ -194,7 +203,7 @@ body::after {
 
 #menu-button {
     height: 150px;
-    width: 640px;
+    width: 750px;
     background-image: url("../assets/images/menu-button.png");
     background-size: cover;
     background-position: center;
@@ -280,4 +289,13 @@ body::after {
 p {
     color: white;
     font-size: 30px;
+}
+
+#top-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+#score-lives-container{
+    margin-left: 20px;
 }
