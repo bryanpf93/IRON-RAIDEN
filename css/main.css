@@ -12,8 +12,10 @@ body::after {
   content: "";
   position: fixed;
   inset: 0;
+  height: 200%;
   pointer-events: none;
   z-index: -1;
+  will-change: transform;
 }
 
 /* Estrellas lejanas (más pequeñas y lentas) */
@@ -38,13 +40,21 @@ body::after {
 
 /* Animaciones infinitas */
 @keyframes starsMoveSlow {
-  from { background-position: 0 0; }
-  to   { background-position: 0 1000px; }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1000px);
+  }
 }
 
 @keyframes starsMoveFast {
-  from { background-position: 0 0; }
-  to   { background-position: 0 1500px; }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1500px);
+  }
 }
 
 /* Tu board del juego */
