@@ -144,7 +144,7 @@ const startGame = () => {
         spawnInterval = setInterval(() => {
             const newEnemy = new Enemy()
             enemiesArr.push(newEnemy)
-        }, 2500);
+        }, 3000);
 
         moveInterval = setInterval(() => {
 
@@ -155,7 +155,7 @@ const startGame = () => {
                     enemyInstance.enemyElement.remove()
                     enemiesArr.splice(enemyInstanceIndex, 1)
                     lives--
-                    livesElm.innerHTML = `LIVES: ${lives}`
+                    livesElm.innerText = "LIVES: " + "🚀 ".repeat(lives)
                     
                     if (lives <= 0) {
                         location.href = "game-over.html" // Redirige a la pantalla de Game Over si el jugador pierde todas sus vidas

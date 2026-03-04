@@ -81,13 +81,13 @@ IRON-RAIDEN
 │ └── images
 │
 ├── css
-│ └── styles.css
+│ └── main.css
 │
 ├── js
-│ └── game.js
+│ └── main.js
 │
 ├── index.html
-├── menu.html
+├── game.html
 ├── controls.html
 ├── game-over.html
 └── README.md
