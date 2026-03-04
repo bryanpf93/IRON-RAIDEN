@@ -93,7 +93,7 @@ body::after {
 #play-game-button {
     height: 150px;
     width: 750px;
-    background-image: url("../assets/images/play-game-test.png");
+    background-image: url("../assets/images/play-game-button.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -219,7 +219,7 @@ body::after {
 #back-to-menu-button {
     height: 120px;
     width: 120px;
-    background-image: url("../assets/images/back-to-menu.png");
+    background-image: url("../assets/images/back-to-menu-button.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
