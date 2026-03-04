@@ -105,7 +105,7 @@ class Bullet {
     }
 
     moveUp() {
-        this.positionY = this.positionY + 10; // Velocidad de la bala
+        this.positionY = this.positionY + 20; // Velocidad de la bala
         this.updateUI()
     }
 
