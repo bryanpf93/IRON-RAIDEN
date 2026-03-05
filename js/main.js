@@ -191,7 +191,7 @@ const startGame = () => {
         spawnInterval = setInterval(() => {
             const newEnemy = new Enemy()
             enemiesArr.push(newEnemy)
-        }, 3000);
+        }, 2000);
 
         moveInterval = setInterval(() => {
 
@@ -247,7 +247,10 @@ const startGame = () => {
                         bulletArr.splice(bulletIndex, 1)
                         score += 10
                         scoreElm.innerHTML = `SCORE: ${score}`
-                        console.log(score)
+
+                        if (score >= 200) {
+                            location.href = "you-win.html"
+                        }
 
                     }
                 })

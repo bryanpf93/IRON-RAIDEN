@@ -175,7 +175,32 @@ body::after {
     background-repeat: no-repeat;
 }
 
+#page-you-win {
+    width: 40vw;
+    height: calc(100vh - 40px);
+    position: relative;
+    overflow: hidden;
+    margin: 20px auto;
+    background-image: url("../assets/images/board.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  
+    align-items: center;
+}
 
+#you-win-logo{
+    height: 360px;
+    width: 475px;
+    background-image: url("../assets/images/you-win.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    top: 100px;
+    margin-bottom: 150px;
+}
 
 #page-gameover {
     width: 40vw;
