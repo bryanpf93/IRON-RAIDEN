@@ -113,7 +113,7 @@ class Bullet {
     }
 
     moveUp() {
-        this.positionY = this.positionY + 10; // Velocidad de la bala
+        this.positionY = this.positionY + 14; // Velocidad de la bala
         this.updateUI()
     }
 
@@ -169,6 +169,18 @@ const movePlayer = () => {
 
     player.positionX += dx * player.speed // mueve al jugador horizontalmente según dirección y velocidad
     player.positionY += dy * player.speed // mueve al jugador verticalmente según dirección y velocidad
+
+    // LIMITES DEL BOARD
+    if (player.positionX < 0) player.positionX = 0
+    if (player.positionX > parentElm.clientWidth - player.width) {
+        player.positionX = parentElm.clientWidth - player.width
+    }
+
+    if (player.positionY < 0) player.positionY = 0
+    if (player.positionY > parentElm.clientHeight - player.height) {
+        player.positionY = parentElm.clientHeight - player.height
+    }
+
 
     player.updateUI() // actualiza la posición visual del jugador en el DOM
 }
