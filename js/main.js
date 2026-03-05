@@ -7,7 +7,8 @@ const gameMusic = document.getElementById("game-music")
 gameMusic.volume = 0.25
 const loseLifeSound = document.getElementById("lose-life-sound");
 loseLifeSound.volume = 0.25
-
+const enemyHitSound = document.getElementById("enemy-hit-sound");
+enemyHitSound.volume = 0.25
 
 
 class Player {
@@ -143,7 +144,31 @@ const keys = { // objeto que guarda el estado de las teclas del jugador
 let spawnInterval = null;
 let moveInterval = null;
 
+const createExplosion = (enemy) => {
+    const explosion = document.createElement("div")
+    explosion.className = "explosion"
+    const explosionWidth = 120
+    const explosionHeight = 120
 
+    // Calculamos la posición horizontal donde aparecerá la explosión
+    // enemy.positionX : posición izquierda del enemigo
+    // enemy.width / 2 : centro del enemigo
+    // explosionWidth / 2 : restamos la mitad de la explosión para centrarla
+    explosion.style.left = enemy.positionX + enemy.width / 2 - explosionWidth / 2 + "px"
+
+    // Calculamos la posición vertical de la explosión
+    // enemy.positionY : posición inferior del enemigo
+    // enemy.height / 2 : centro del enemigo
+    // explosionHeight / 2 : restamos para centrar la explosión verticalmente
+    explosion.style.bottom = enemy.positionY + enemy.height / 2 - explosionHeight / 2 + "px"
+
+    parentElm.appendChild(explosion)
+    // Esperamos 350 milisegundos (lo que dura la animación)
+    // y después eliminamos la explosión del DOM
+    setTimeout(() => {
+        explosion.remove()
+    }, 350)
+}
 
 // Funcion que crea las balas
 const shootBullet = () => {
@@ -201,6 +226,7 @@ const startGame = () => {
                 enemyInstance.moveDown()
                 // Elimina el enemigo si llega al fondo del tablero
                 if (enemyInstance.positionY < 0) {
+                    createExplosion(enemyInstance)
                     enemyInstance.enemyElement.remove()
                     enemiesArr.splice(enemyInstanceIndex, 1)
                     lives--
@@ -241,6 +267,9 @@ const startGame = () => {
                         bullet.positionY < enemy.positionY + enemy.height &&
                         bullet.positionY + bullet.height > enemy.positionY
                     ) {
+                        createExplosion(enemy)
+                        enemyHitSound.currentTime = 0
+                        enemyHitSound.play()
                         enemy.enemyElement.remove()
                         enemiesArr.splice(enemyIndex, 1)
                         bullet.remove()
