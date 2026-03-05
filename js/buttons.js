@@ -44,8 +44,15 @@ if (backToMenuButtonTwo) {
     });
 }
 
-menuMusic.volume = 0.4
-
 document.addEventListener("click", () => {
-    menuMusic.play()
-}, { once: true })
+  if (menuMusic) {
+    menuMusic.play();
+  }
+}, { once: true });
+
+
+if (menuMusic) {
+  window.addEventListener("load", () => {
+    menuMusic.play();
+  });
+}

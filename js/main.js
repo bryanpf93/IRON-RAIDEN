@@ -2,6 +2,12 @@ const parentElm = document.getElementById("board")
 const playerElm = document.getElementById("player")
 const scoreElm = document.getElementById("score")
 const livesElm = document.getElementById("lives")
+const shootSound = document.getElementById("shoot-sound")
+const gameMusic = document.getElementById("game-music")
+gameMusic.volume = 0.25
+const loseLifeSound = document.getElementById("lose-life-sound");
+loseLifeSound.volume = 0.25
+
 
 
 class Player {
@@ -127,18 +133,22 @@ let lives = 3
 let score = 0;
 
 const keys = { // objeto que guarda el estado de las teclas del jugador
-  ArrowLeft: false,  // true si la tecla izquierda está presionada
-  ArrowRight: false, // true si la tecla derecha está presionada
-  ArrowUp: false,    // true si la tecla arriba está presionada
-  ArrowDown: false   // true si la tecla abajo está presionada
+    ArrowLeft: false,  // true si la tecla izquierda está presionada
+    ArrowRight: false, // true si la tecla derecha está presionada
+    ArrowUp: false,    // true si la tecla arriba está presionada
+    ArrowDown: false   // true si la tecla abajo está presionada
 }
 
 // Se inicializan en null para saber que aun no existen
 let spawnInterval = null;
 let moveInterval = null;
 
+
+
 // Funcion que crea las balas
 const shootBullet = () => {
+    shootSound.currentTime = 0
+    shootSound.play()
     const bullet = new Bullet(
         player.positionX + player.width / 2,  // En el centro horizontal del jugador
         player.positionY + player.height  //  Encima de su posicion vertical
@@ -149,18 +159,18 @@ const shootBullet = () => {
 
 const movePlayer = () => {
 
-  let dx = 0 // variable que guardará la dirección horizontal (-1 izquierda, 1 derecha)
-  let dy = 0 // variable que guardará la dirección vertical (1 arriba, -1 abajo)
+    let dx = 0 // variable que guardará la dirección horizontal (-1 izquierda, 1 derecha)
+    let dy = 0 // variable que guardará la dirección vertical (1 arriba, -1 abajo)
 
-  if (keys.ArrowLeft) dx -= 1 // si la tecla izquierda está pulsada, restamos 1 → mover a la izquierda
-  if (keys.ArrowRight) dx += 1 // si la tecla derecha está pulsada, sumamos 1 → mover a la derecha
-  if (keys.ArrowUp) dy += 1 // si la tecla arriba está pulsada, sumamos 1 → mover hacia arriba
-  if (keys.ArrowDown) dy -= 1 // si la tecla abajo está pulsada, restamos 1 → mover hacia abajo
+    if (keys.ArrowLeft) dx -= 1 // si la tecla izquierda está pulsada, restamos 1 → mover a la izquierda
+    if (keys.ArrowRight) dx += 1 // si la tecla derecha está pulsada, sumamos 1 → mover a la derecha
+    if (keys.ArrowUp) dy += 1 // si la tecla arriba está pulsada, sumamos 1 → mover hacia arriba
+    if (keys.ArrowDown) dy -= 1 // si la tecla abajo está pulsada, restamos 1 → mover hacia abajo
 
-  player.positionX += dx * player.speed // mueve al jugador horizontalmente según dirección y velocidad
-  player.positionY += dy * player.speed // mueve al jugador verticalmente según dirección y velocidad
+    player.positionX += dx * player.speed // mueve al jugador horizontalmente según dirección y velocidad
+    player.positionY += dy * player.speed // mueve al jugador verticalmente según dirección y velocidad
 
-  player.updateUI() // actualiza la posición visual del jugador en el DOM
+    player.updateUI() // actualiza la posición visual del jugador en el DOM
 }
 
 // Funcion que inicia el juego
@@ -178,12 +188,16 @@ const startGame = () => {
             enemiesArr.forEach((enemyInstance, enemyInstanceIndex) => {
                 enemyInstance.moveDown()
                 // Elimina el enemigo si llega al fondo del tablero
-                if (enemyInstance.positionY < 0) {  
+                if (enemyInstance.positionY < 0) {
                     enemyInstance.enemyElement.remove()
                     enemiesArr.splice(enemyInstanceIndex, 1)
                     lives--
+
+                    loseLifeSound.currentTime = 0
+                    loseLifeSound.play()
+
                     livesElm.innerText = "LIVES: " + "🚀 ".repeat(lives)
-                    
+
                     if (lives <= 0) {
                         location.href = "game-over.html" // Redirige a la pantalla de Game Over si el jugador pierde todas sus vidas
                     }
@@ -203,7 +217,7 @@ const startGame = () => {
 
             bulletArr.forEach((bullet, bulletIndex) => {
                 bullet.moveUp();
-                if (bullet.positionY > parentElm.clientHeight ) {
+                if (bullet.positionY > parentElm.clientHeight) {
                     bullet.remove()
                     bulletArr.splice(bulletIndex, 1)
                     return // Elimina la bala del array y el DOM cuando se sale de la pagina 
@@ -245,13 +259,25 @@ const pauseGame = () => {
 document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
         pauseGame()
+        gameMusic.pause()
     } else {
         startGame()
+        setTimeout(() => {
+            gameMusic.play()
+        }, 700)
     }
 })
 
-window.addEventListener("blur", () => pauseGame()) // minimizas el navegador
-window.addEventListener("focus", () => startGame()) // vuelves al navegador
+window.addEventListener("blur", () => {
+    pauseGame() // minimizas el navegador
+    gameMusic.pause()
+})
+window.addEventListener("focus", () => {
+    startGame() // vuelves al navegador
+    setTimeout(() => {
+        gameMusic.play()
+    }, 1000)
+})
 
 // Inicia el juego al cargar la página siempre que el focus sea el navegador
 if (document.hasFocus()) {
@@ -263,24 +289,31 @@ if (document.hasFocus()) {
 
 document.addEventListener("keydown", (e) => {
 
-  if (keys.hasOwnProperty(e.code)) { 
-    // comprueba si la tecla que se pulsó es una de las que controlan movimiento
-    keys[e.code] = true // marca esa tecla como PRESIONADA
-  }
+    if (keys.hasOwnProperty(e.code)) {
+        // comprueba si la tecla que se pulsó es una de las que controlan movimiento
+        keys[e.code] = true // marca esa tecla como PRESIONADA
+    }
 
-  if (e.code === "Space") {
-    shootBullet()
-  }
+    if (e.code === "Space") {
+        shootBullet()
+    }
 
 })
 
 document.addEventListener("keyup", (e) => {
 
-  if (keys.hasOwnProperty(e.code)) {
-    // si soltamos una tecla de movimiento
-    keys[e.code] = false // marcamos esa tecla como NO presionada
-  }
+    if (keys.hasOwnProperty(e.code)) {
+        // si soltamos una tecla de movimiento
+        keys[e.code] = false // marcamos esa tecla como NO presionada
+    }
 
 })
+
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        gameMusic.play()
+    }, 1000)
+})
+
 
 
